@@ -39,22 +39,22 @@ contract RoadClosed {
     }
 
     function addToWhitelist(address addr) public {
-        require(!isContract(addr),"Contracts are not allowed");
+        require(!isContract(addr),"Contracts are not allowed"); // @audit Step #1: Call this Function with your own Wallet Address and get in the WhiteList.
         whitelistedMinters[addr] = true;
     }
     
 
     function changeOwner(address addr) public {
         require(whitelistedMinters[addr], "You are not whitelisted");
-				require(msg.sender == addr, "address must be msg.sender");
+	require(msg.sender == addr, "address must be msg.sender"); // @audit Step #2: Call this Function with your own Wallet Address to become the Owner.
         require(addr != address(0), "Zero address");
         owner = addr;
     }
 
     function pwn(address addr) external payable{
         require(!isContract(msg.sender), "Contracts are not allowed");
-				require(msg.sender == addr, "address must be msg.sender");
-        require (msg.sender == owner, "Must be owner");
+	require(msg.sender == addr, "address must be msg.sender");
+        require (msg.sender == owner, "Must be owner"); // @audit Step #3: Call this Function with your own Wallet Address to change the value "hacked = true;".
         hacked = true;
     }
 
